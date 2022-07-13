@@ -6,10 +6,7 @@ import flask
 from static.python.backend.weather_backend_api import WeatherBackendAPI
 
 app = flask.Flask(__name__)
-print('Before ws backend')
 ws_backend = WeatherBackendAPI.setup()
-print('After ws backend')
-print(ws_backend.provider.provider_name)
 
 @app.get('/')
 def index():

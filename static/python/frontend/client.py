@@ -2,22 +2,21 @@
 from datetime import datetime
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import pyodide
+from pyodide import create_proxy
 # noinspection PyUnresolvedReferences,PyPackageRequirements
-from js import DOMParser, document, setInterval, console
+from js import DOMParser, document, setInterval, clearInterval, console
 
 # noinspection PyPackages
 import weather_frontend_api 
 from weather_report import WeatherReport
 
-
 def main():
-    print('before clock')
-    view_clock()
-    print('before weather')
+    global interval_id
+    #view_clock()
     set_all_weather()
-    print('before refresh event')
     add_refresh_event()
-
+    proxy = create_proxy(view_clock)
+    interval_id = setInterval(proxy, 10000)
 
 def set_all_weather():
     set_main_weather()
@@ -26,10 +25,10 @@ def set_all_weather():
 
 
 def view_clock():
+    global interval_id
     body = document.getElementById('the_body')
     div_clock = document.getElementById('clock')
     add_class(div_clock, 'hidden')
-    clear_body_colors(body)
     div_clock.innerText = str(datetime.now().strftime("%H:%M"))
     remove_class(div_clock, 'hidden')
 
