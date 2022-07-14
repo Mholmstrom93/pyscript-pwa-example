@@ -31,17 +31,20 @@ This app has been extended with the purpose to run on a smart mirror display.
 
 ## Current features
 - Display time
+    - Autoupdate the time
 - Weather app
     - Color theame based on weather conditions
     - Real time weather (From SMHI (Sveriges meteorologiska och hydrologiska institut))
     - Caching weather data
+    - Position (Lon Lat) detection
 - Refresh button
 
 ## Comming features
 - Display time
-    - Autoupdate the time
+    - ~~Autoupdate the time~~
 - Weather app
-    - Position (Lon Lat) detection
+    - ~~Position (Lon Lat) detection~~
+    - Adjust for all seasons (include snow data)
 - Calendar app
 - Commute app (train/buss schedule)
 - Raspberry pi friendly runtime

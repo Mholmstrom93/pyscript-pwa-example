@@ -7,8 +7,8 @@ from typing import Protocol
 @dataclass
 class ForecastData:
     date: datetime
-    temperature_in_c: float
     rain_in_mm: float
+    temperature_in_c: float
 
 
 class WeatherProviderProtocal(Protocol):

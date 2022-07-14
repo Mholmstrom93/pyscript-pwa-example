@@ -1,4 +1,5 @@
 # Standard libraries
+import re
 import json
 import requests
 from datetime import datetime, timedelta
@@ -8,10 +9,34 @@ from static.python.backend.provider import ForecastData
 # Lon lat for Molndal
 
 class SHMIProvider:
-    def __init__(self, provider_name: str, request_url: str, cache_file_path: str):
+    def __init__(self, provider_name: str, request_url: str, cache_file_path: str, 
+                                            lat: float = 12.013, lon: float = 57.656):
         self.provider_name = provider_name
         self.request_url = request_url
         self.cache_file_path = cache_file_path
+        self.lat = lat
+        self.lon = lon
+
+    def __repr__(self):
+        return_string = {
+            'provider_name': self.provider_name,
+            'request_url': self.request_url,
+            'cache_file_path': self.cache_file_path,
+            'lat': self.lat,
+            'lon': self.lon,
+        }
+        return str(return_string)
+
+    def update_geolocation(self, lat, lon):
+        if self.lat != lat and self.lon != lon:
+            self.lat = lat
+            self.lon = lon
+            self.request_url = re.sub(r"lat.\d+.\d+", f'lat/{lat}', self.request_url)
+            self.request_url = re.sub(r"lon.\d+.\d+", f'lon/{lon}', self.request_url)
+            self.write_cache()
+            return True
+        else:
+            return False
 
     # Local caching
     def write_cache(self):
