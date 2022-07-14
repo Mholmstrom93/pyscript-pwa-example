@@ -16,3 +16,11 @@ def download_report(forecast_day: int) -> WeatherReport:
         forecast = json.loads(resp.read()) 
     return WeatherReport(**forecast)
 
+def update_geolocation(lat: float, lon: float):
+    try:
+        resp: io.StringIO = pyodide.open_url(f'/weather/data/lat/{lat}/lon/{lon}')
+        return True
+    # Figure out correct exception and/or read of the error code
+    except Exception as e:
+        print(e)
+        return False

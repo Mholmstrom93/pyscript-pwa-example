@@ -1,22 +1,25 @@
 # noinspection PyUnresolvedReferences
 from datetime import datetime
+import re
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import pyodide
-from pyodide import create_proxy
+from pyodide import create_proxy, create_once_callable
 # noinspection PyUnresolvedReferences,PyPackageRequirements
-from js import DOMParser, document, setInterval, clearInterval, console
+import js
+from js import DOMParser, document, setInterval, clearInterval, console, navigator
 
 # noinspection PyPackages
 import weather_frontend_api 
 from weather_report import WeatherReport
 
+
 def main():
     global interval_id
-    #view_clock()
     set_all_weather()
     add_refresh_event()
+    add_get_position_event()
     proxy = create_proxy(view_clock)
-    interval_id = setInterval(proxy, 10000)
+    interval_id = setInterval(proxy, 1000)
 
 def set_all_weather():
     set_main_weather()
@@ -26,7 +29,6 @@ def set_all_weather():
 
 def view_clock():
     global interval_id
-    body = document.getElementById('the_body')
     div_clock = document.getElementById('clock')
     add_class(div_clock, 'hidden')
     div_clock.innerText = str(datetime.now().strftime("%H:%M"))
@@ -101,7 +103,7 @@ def clear_body_colors(body):
 
 
 def add_refresh_event():
-    def evt(e=None):
+    def event(e=None):
         view_clock()
         set_all_weather()
         if e:
@@ -109,7 +111,44 @@ def add_refresh_event():
         return False
 
     refresh_link = document.getElementById('refresh')
-    refresh_link.onclick = evt
+    refresh_link.onclick = event
+
+
+def add_get_position_event(): 
+    def event(e=None):
+        console.log('Position button clicked')
+        def success_callback(position):
+            console.log('Successfully retrived the geolocation.')
+            console.log(position)
+            lat_text = document.getElementById('lat')
+            lon_text = document.getElementById('lon')
+            # NOTE: Accuracy for lat, lon arbitrarly set here
+            lat = str(position.coords.latitude)[:6]
+            lon = str(position.coords.longitude)[:6] 
+            lat_text.innerText = f'Latitidue: {lat}'
+            lon_text.innerText = f'Longitude: {lon}, '
+            update_geolocation_in_backend()
+            set_all_weather()
+        def error_callback(err):
+            console.log(f'Something went wrong... error: {err}')
+            console.log(f'error.code: {err.code}')
+            console.log(f'error.message: {err.message}')
+        js_proxy_success = create_proxy(success_callback)
+        js_proxy_error = create_proxy(error_callback)
+        navigator.geolocation.getCurrentPosition(js_proxy_success, js_proxy_error)
+        if e:
+            e.preventDefault()
+        return False
+    
+    position_link = document.getElementById('position')
+    position_link.onclick = event
+
+
+def update_geolocation_in_backend():
+    # Parsing out only the float data
+    lat = float(re.sub(r"[^0-9.]", "", document.getElementById('lat').innerText))
+    lon = float(re.sub(r"[^0-9.]", "", document.getElementById('lon').innerText))
+    weather_frontend_api.update_geolocation(lat, lon)
 
 
 def remove_class(element, class_name):
