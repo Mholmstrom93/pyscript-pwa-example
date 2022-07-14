@@ -44,6 +44,7 @@ This app has been extended with the purpose to run on a smart mirror display.
     - ~~Autoupdate the time~~
 - Weather app
     - ~~Position (Lon Lat) detection~~
+    - Adjust for all seasons (include snow data)
 - Calendar app
 - Commute app (train/buss schedule)
 - Raspberry pi friendly runtime

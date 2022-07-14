@@ -9,7 +9,7 @@ import js
 from js import DOMParser, document, setInterval, clearInterval, console, navigator
 
 # noinspection PyPackages
-import weather_frontend_api 
+from weather_frontend_api import WeatherFrontendAPI 
 from weather_report import WeatherReport
 
 
@@ -37,7 +37,7 @@ def view_clock():
 
 def get_forecast(forecast_day: int = 0):
     try:
-        forecast: WeatherReport = weather_frontend_api.download_report(forecast_day)
+        forecast: WeatherReport = WeatherFrontendAPI.download_report(forecast_day)
     except Exception as x:
         console.log("Error calling weather API: {}".format(x))
         forecast = create_error_style_report()
@@ -148,7 +148,7 @@ def update_geolocation_in_backend():
     # Parsing out only the float data
     lat = float(re.sub(r"[^0-9.]", "", document.getElementById('lat').innerText))
     lon = float(re.sub(r"[^0-9.]", "", document.getElementById('lon').innerText))
-    weather_frontend_api.update_geolocation(lat, lon)
+    WeatherFrontendAPI.update_geolocation(lat, lon)
 
 
 def remove_class(element, class_name):
