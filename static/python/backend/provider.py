@@ -22,6 +22,9 @@ class WeatherProviderProtocal(Protocol):
     def get_forecast_data() -> ForecastData:
         raise NotImplementedError
 
+    def update_geolocation() -> bool:
+        raise NotImplementedError
+
     def read_cache() -> None:
         raise NotImplementedError
 
@@ -30,5 +33,8 @@ class WeatherProviderProtocal(Protocol):
     
     def update_cache() -> None:
         raise NotImplementedError
+    
+    def __repr__(self) -> str:
+        return NotImplementedError
 
 

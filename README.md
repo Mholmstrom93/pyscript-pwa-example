@@ -28,6 +28,8 @@ If you have improvements for the PWA side of things, please open a PR. It's very
 # Smartmirror display
 
 This app has been extended with the purpose to run on a smart mirror display. 
+Developed for (and on) a 27" monitor standing sideways. Help with more display
+sizes would be appreciated, I have no idea what I'm doing. 
 
 ## Current features
 - Display time

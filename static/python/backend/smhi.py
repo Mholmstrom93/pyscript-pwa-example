@@ -10,7 +10,7 @@ from static.python.backend.provider import ForecastData
 
 class SHMIProvider:
     def __init__(self, provider_name: str, request_url: str, cache_file_path: str, 
-                                            lat: float = 12.013, lon: float = 57.656):
+                                            lat: float = None, lon: float = None):
         self.provider_name = provider_name
         self.request_url = request_url
         self.cache_file_path = cache_file_path
@@ -18,14 +18,14 @@ class SHMIProvider:
         self.lon = lon
 
     def __repr__(self):
-        return_string = {
+        representation_string = {
             'provider_name': self.provider_name,
             'request_url': self.request_url,
             'cache_file_path': self.cache_file_path,
             'lat': self.lat,
             'lon': self.lon,
         }
-        return str(return_string)
+        return str(representation_string)
 
     def update_geolocation(self, lat, lon):
         if self.lat != lat and self.lon != lon:
